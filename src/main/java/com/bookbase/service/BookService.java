@@ -19,6 +19,10 @@ public class BookService {
     }
 
     public String addBook(Book book){
+        Book existingBook=bookRepository.findByTitle(book.getTitle());
+        if(existingBook==null){
+            return "book with title: "+book.getTitle()+" already exists";
+        }
         bookRepository.save(book);
         return "Book Added Successfully";
     }
@@ -30,7 +34,7 @@ public class BookService {
             bookRepository.delete(book);
             return "Book deleted Successfully";
         }
-        return "failed to delete book";
+        return "Book doesn't Exist";
     }
 
     public String updateBook(Book book,Long id){
