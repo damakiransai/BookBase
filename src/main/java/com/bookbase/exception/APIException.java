@@ -1,4 +1,4 @@
-package com.bookbase.Exception;
+package com.bookbase.exception;
 
 
 //to handle generic API-Related exceptions
