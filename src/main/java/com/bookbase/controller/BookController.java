@@ -19,6 +19,11 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @GetMapping("/getBook/{title}")
+    public Book getBookByName(@PathVariable("title") String title){
+        return bookService.getBookByTitle(title);
+    }
+
     @PostMapping("/addBook")
     public String addBook(@RequestBody Book book){
         return bookService.addBook(book);
