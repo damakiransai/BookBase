@@ -8,7 +8,10 @@ import com.bookbase.exception.ResourceNotFoundException;
 import com.bookbase.repository.BookRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +25,16 @@ public class BookService {
     @Autowired
     ModelMapper modelMapper;
 
-    public BookResponse getAllBooks(){
-        java.util.List<Book> books =bookRepository.findAll();
+    public BookResponse getAllBooks(Integer pageNumber,Integer pageSize,String sortBy,String sortOrder){
+        Sort sortByAndOrder=sortOrder.equalsIgnoreCase("asc")?
+                Sort.by(sortBy).ascending():
+                Sort.by(sortBy).descending();
+
+        Pageable pageDetails= PageRequest.of(pageNumber,pageSize,sortByAndOrder);
+        Page<Book> page=bookRepository.findAll(pageDetails);
+
+        List<Book> books=page.getContent();
+
         List<BookDTO> bookDTOS=books.stream().map(book -> modelMapper.map(book, BookDTO.class)).toList();
 
         BookResponse bookResponse=new BookResponse(bookDTOS);

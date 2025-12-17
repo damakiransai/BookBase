@@ -2,6 +2,7 @@ package com.bookbase.controller;
 
 import com.bookbase.DTO.BookDTO;
 import com.bookbase.DTO.BookResponse;
+import com.bookbase.config.AppConstants;
 import com.bookbase.entity.Book;
 import com.bookbase.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,14 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/getAllBooks")
-    public ResponseEntity<BookResponse> getAllBooks(){
+    public ResponseEntity<BookResponse> getAllBooks(
+            @RequestParam(name = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(name = "sortBy",defaultValue = AppConstants.SORT_BY,required = false) String sortBy,
+            @RequestParam(name = "sortOrder",defaultValue = AppConstants.SORT_ORDER,required = false) String sortOrder){
         return ResponseEntity.
                 status(HttpStatus.OK).
-                body(bookService.getAllBooks());
+                body(bookService.getAllBooks(pageNumber,pageSize,sortBy,sortOrder));
     }
 
     @GetMapping("/getBook/{title}")
